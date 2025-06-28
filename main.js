@@ -1,12 +1,12 @@
 // importing threejs
 import * as THREE from "three";
-
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 // setting up the basic scene
 const scene = new THREE.Scene();
 // creating the camera
 // 4 values here: fov, aspect ratio, near plane, far plane (planes are basically the focus distance on a camera irl)
 const camera = new THREE.PerspectiveCamera(
-  75,
+  50,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
@@ -29,7 +29,34 @@ const cube = new THREE.Mesh(geometry, material);
 // scene.add() adds the created mesh to the scene, by default it sends it to 0, 0, 0
 scene.add(cube);
 // moving the camera back on the z axis so we can see the cube. By default the camera is also set at 0 , 0, 0.
-camera.position.z = 5;
+camera.position.set(3, 5, 5); // x, y, z
+camera.lookAt(0, 0, 0); // look at the center of the scene
+
+const LineMaterial = new THREE.LineBasicMaterial({ color: 0x0000ff });
+
+const points = [];
+points.push(new THREE.Vector3(50, 0, 0));
+points.push(new THREE.Vector3(0, 0, 0));
+points.push(new THREE.Vector3(-50, 0, 0));
+
+const LineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+
+const line = new THREE.Line(LineGeometry, LineMaterial);
+
+scene.add(line);
+
+const loader = new GLTFLoader();
+
+loader.load(
+  "./terrarium/scene.gltf",
+  function (gltf) {
+    scene.add(gltf.scene);
+  },
+  undefined,
+  function (error) {
+    console.error(error);
+  }
+);
 
 // a simple render loop to render the scene and camera
 // This function is called every frame to update the scene
