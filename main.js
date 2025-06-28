@@ -1,6 +1,7 @@
 // importing threejs
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 // setting up the basic scene
 const scene = new THREE.Scene();
 // creating the camera
@@ -11,13 +12,14 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-
 // creating the renderer
 const renderer = new THREE.WebGLRenderer();
 // sets how big your canvas is with the 3D scene (Note: window.innerWidth and window.innerHeight are the width and height of the browser window)
 renderer.setSize(window.innerWidth, window.innerHeight);
 // appending the renderer's canvas to the body of the document. Basically taking the renderer's canvas and sending it to the html page so you can see it
 document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
 
 // creating a simple cube to the scene
 // BoxGeometry is a built-in geometry in three.js that creates a cube
@@ -65,6 +67,7 @@ function animate() {
   // rotating the cube infinitely
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
+  controls.update();
   renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);
